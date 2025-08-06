@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quote Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { text-align: center; margin-top: 50px; }
+        input, button { padding: 10px; margin: 10px; border-radius: 5px; }
+        .quote-box { background: #f0f0f0; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 AI-Powered Quote Generator</h1>
+        <p>Enter your mood or topic to get personalized inspirational quotes!</p>
+        
+        <input type="text" id="moodInput" placeholder="Enter mood (e.g., motivation, success, happiness)" style="width: 300px;">
+        <br>
+        <button onclick="generateQuote()">Generate Quote ✨</button>
+        
+        <div id="quoteResult" class="quote-box" style="display: none;">
+            <h3>Your Personalized Quote:</h3>
+            <p id="quoteText"></p>
+        </div>
+    </div>
+
+    <script>
+        async function generateQuote() {
+            const mood = document.getElementById('moodInput').value || 'motivation';
+            const resultDiv = document.getElementById('quoteResult');
+            const quoteText = document.getElementById('quoteText');
+            
+            try {
+                const response = await fetch('/generate-quote', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({mood: mood})
+                });
+                
+                const data = await response.json();
+                quoteText.innerHTML = data.quote;
+                resultDiv.style.display = 'block';
+            } catch (error) {
+                quoteText.innerHTML = 'Error generating quote. Please try again.';
+                resultDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
